@@ -7,16 +7,15 @@ export const state = {
 };
 
 //TODO
+// pass proper error from the server
 
-// Load DB items from server (Fetch request)
-
-export const db = {
-  people: [
-    { name: 'John', age: 27 },
-    { name: 'Jack', age: 19 },
-    { name: 'Mack', age: 51 },
-    { name: 'Sasin', age: 70 },
-    { name: 'Richard', age: 34 },
-    { name: 'Andrew', age: 42 },
-  ],
+export const getAllUsers = async (url) => {
+  try {
+    const result = await fetch(url);
+    const data = await result.json();
+    state.people = data;
+    console.log(state.people);
+  } catch (error) {
+    console.log(error);
+  }
 };

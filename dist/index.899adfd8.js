@@ -464,21 +464,29 @@ var searchView = _interopRequireWildcard(require("./searchiVew.js"));
 
 var _helper = require("./helper");
 
+var _config = require("./config.js");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-const init = () => {
-  _helper.elements.searchInput.addEventListener('input', () => searchView.onInputHandler(model.db)); //SEARCH INPUT ON TOUCHED EVENT HANDLER
+const searchControl = async () => {
+  //Fetch all users
+  await model.getAllUsers(_config.API_URL);
 
+  _helper.elements.searchInput.addEventListener('input', () => searchView.onInputHandler(model.state.people));
 
   _helper.elements.searchInput.addEventListener('click', () => {
     searchView.onFirstTouchHandler(model.state.searchInputTouced);
   });
 };
 
+const init = () => {
+  searchControl();
+};
+
 init();
-},{"core-js/modules/es.typed-array.float32-array":"6vFQh","core-js/modules/es.typed-array.float64-array":"2eOQr","core-js/modules/es.typed-array.int8-array":"XYZw7","core-js/modules/es.typed-array.int16-array":"3h7FL","core-js/modules/es.typed-array.int32-array":"2wvgL","core-js/modules/es.typed-array.uint8-array":"2VDQl","core-js/modules/es.typed-array.uint8-clamped-array":"2bFdN","core-js/modules/es.typed-array.uint16-array":"10bKA","core-js/modules/es.typed-array.uint32-array":"3XrCq","core-js/modules/es.typed-array.from":"JJTD6","core-js/modules/es.typed-array.of":"1qtO8","core-js/modules/web.immediate":"BQdWp","core-js/modules/web.url":"5429i","core-js/modules/web.url.to-json":"31slQ","core-js/modules/web.url-search-params":"171FE","./model.js":"5cc2Y","./searchiVew.js":"6Ws9g","./helper":"69RC0"}],"6vFQh":[function(require,module,exports) {
+},{"core-js/modules/es.typed-array.float32-array":"6vFQh","core-js/modules/es.typed-array.float64-array":"2eOQr","core-js/modules/es.typed-array.int8-array":"XYZw7","core-js/modules/es.typed-array.int16-array":"3h7FL","core-js/modules/es.typed-array.int32-array":"2wvgL","core-js/modules/es.typed-array.uint8-array":"2VDQl","core-js/modules/es.typed-array.uint8-clamped-array":"2bFdN","core-js/modules/es.typed-array.uint16-array":"10bKA","core-js/modules/es.typed-array.uint32-array":"3XrCq","core-js/modules/es.typed-array.from":"JJTD6","core-js/modules/es.typed-array.of":"1qtO8","core-js/modules/web.immediate":"BQdWp","core-js/modules/web.url":"5429i","core-js/modules/web.url.to-json":"31slQ","core-js/modules/web.url-search-params":"171FE","./model.js":"5cc2Y","./searchiVew.js":"6Ws9g","./helper":"69RC0","./config.js":"he5L7"}],"6vFQh":[function(require,module,exports) {
 var createTypedArrayConstructor = require('../internals/typed-array-constructor');
 
 // `Float32Array` constructor
@@ -4996,7 +5004,7 @@ $({ target: 'URL', proto: true, enumerable: true }, {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.db = exports.state = void 0;
+exports.getAllUsers = exports.state = void 0;
 
 require("core-js/modules/es.typed-array.float32-array");
 
@@ -5032,31 +5040,22 @@ const state = {
   searchInputTouced: false,
   people: null
 }; //TODO
-// Load DB items from server (Fetch request)
+// pass proper error from the server
 
 exports.state = state;
-const db = {
-  people: [{
-    name: 'John',
-    age: 27
-  }, {
-    name: 'Jack',
-    age: 19
-  }, {
-    name: 'Mack',
-    age: 51
-  }, {
-    name: 'Sasin',
-    age: 70
-  }, {
-    name: 'Richard',
-    age: 34
-  }, {
-    name: 'Andrew',
-    age: 42
-  }]
+
+const getAllUsers = async url => {
+  try {
+    const result = await fetch(url);
+    const data = await result.json();
+    state.people = data;
+    console.log(state.people);
+  } catch (error) {
+    console.log(error);
+  }
 };
-exports.db = db;
+
+exports.getAllUsers = getAllUsers;
 },{"core-js/modules/es.typed-array.float32-array":"6vFQh","core-js/modules/es.typed-array.float64-array":"2eOQr","core-js/modules/es.typed-array.int8-array":"XYZw7","core-js/modules/es.typed-array.int16-array":"3h7FL","core-js/modules/es.typed-array.int32-array":"2wvgL","core-js/modules/es.typed-array.uint8-array":"2VDQl","core-js/modules/es.typed-array.uint8-clamped-array":"2bFdN","core-js/modules/es.typed-array.uint16-array":"10bKA","core-js/modules/es.typed-array.uint32-array":"3XrCq","core-js/modules/es.typed-array.from":"JJTD6","core-js/modules/es.typed-array.of":"1qtO8","core-js/modules/web.immediate":"BQdWp","core-js/modules/web.url":"5429i","core-js/modules/web.url.to-json":"31slQ","core-js/modules/web.url-search-params":"171FE"}],"6Ws9g":[function(require,module,exports) {
 "use strict";
 
@@ -5095,11 +5094,7 @@ require("core-js/modules/web.url.to-json");
 
 require("core-js/modules/web.url-search-params");
 
-var helpers = _interopRequireWildcard(require("./helper.js"));
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+var _helper = require("./helper.js");
 
 //Toogle notification visibility
 const makeVisibleNotifBox = element => {
@@ -5113,7 +5108,7 @@ const onFirstTouchHandler = touchedState => {
   touchedState = true; //change notification visibility
 
   if (touchedState) {
-    makeVisibleNotifBox(helpers.elements.notificationBox);
+    makeVisibleNotifBox(_helper.elements.notificationBox);
   }
 }; /// SEARCH USERS
 //Find elemnet in DB based on user's input
@@ -5125,7 +5120,7 @@ const getSearchedUser = (query, db) => {
   let filteredUsers = [];
 
   if (query) {
-    filteredUsers = db.people.filter(el => el.name.toLowerCase().includes(query));
+    filteredUsers = db.filter(el => el.name.toLowerCase().includes(query));
   }
 
   return filteredUsers;
@@ -5133,7 +5128,7 @@ const getSearchedUser = (query, db) => {
 
 
 const changeNotifMessage = (element, message) => {
-  helpers.clean(element);
+  (0, _helper.clean)(element);
   let markUp = `<p>${message}<p>`;
   element.innerHTML = markUp;
 }; //Append users list if exist
@@ -5143,28 +5138,27 @@ const showUsers = (element, usersList) => {
   let listMarkUp = ` <ul class="Search__Users-List">
     ${usersList.map(el => `<li>${el.name} - ${el.age}</li>`).join('')}
     </ul>`;
-  helpers.clean(element);
+  (0, _helper.clean)(element);
   element.insertAdjacentHTML('afterbegin', listMarkUp);
 }; //SEARCH INPUT HANDLER
 
 
 const onInputHandler = db => {
-  // Get user's input
   let query = event.target.value; //Get filtered users
 
   const users = getSearchedUser(query, db);
   console.log('Filtered users', users); //Show notification message accordigly
 
   if (query.length === 0) {
-    changeNotifMessage(helpers.elements.notificationBox, 'Nothing to find');
+    changeNotifMessage(_helper.elements.notificationBox, 'Nothing to find');
   }
 
   if (users.length === 0 && query.length > 0) {
-    changeNotifMessage(helpers.elements.notificationBox, 'Nothing found');
+    changeNotifMessage(_helper.elements.notificationBox, 'Nothing found');
   }
 
   if (users.length > 0 && query.length !== 0) {
-    showUsers(helpers.elements.notificationBox, users);
+    showUsers(_helper.elements.notificationBox, users);
   }
 };
 
@@ -5188,6 +5182,15 @@ const clean = element => {
 };
 
 exports.clean = clean;
+},{}],"he5L7":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.API_URL = void 0;
+const API_URL = 'https://enigmatic-lake-81712.herokuapp.com/api/users';
+exports.API_URL = API_URL;
 },{}]},{},["6GPhY","I5Uh7"], "I5Uh7", "parcelRequire9e03")
 
 //# sourceMappingURL=index.899adfd8.js.map

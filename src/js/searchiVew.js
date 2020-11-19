@@ -1,7 +1,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import * as helpers from './helper.js';
+import { elements, clean } from './helper.js';
 
 //Toogle notification visibility
 const makeVisibleNotifBox = (element) => {
@@ -16,7 +16,7 @@ export const onFirstTouchHandler = (touchedState) => {
 
   //change notification visibility
   if (touchedState) {
-    makeVisibleNotifBox(helpers.elements.notificationBox);
+    makeVisibleNotifBox(elements.notificationBox);
   }
 };
 
@@ -26,9 +26,7 @@ const getSearchedUser = (query, db) => {
   let filteredUsers = [];
 
   if (query) {
-    filteredUsers = db.people.filter((el) =>
-      el.name.toLowerCase().includes(query)
-    );
+    filteredUsers = db.filter((el) => el.name.toLowerCase().includes(query));
   }
 
   return filteredUsers;
@@ -36,7 +34,7 @@ const getSearchedUser = (query, db) => {
 
 // Change notif  messgae
 const changeNotifMessage = (element, message) => {
-  helpers.clean(element);
+  clean(element);
   let markUp = `<p>${message}<p>`;
   element.innerHTML = markUp;
 };
@@ -47,13 +45,12 @@ const showUsers = (element, usersList) => {
     ${usersList.map((el) => `<li>${el.name} - ${el.age}</li>`).join('')}
     </ul>`;
 
-  helpers.clean(element);
+  clean(element);
   element.insertAdjacentHTML('afterbegin', listMarkUp);
 };
 
 //SEARCH INPUT HANDLER
 export const onInputHandler = (db) => {
-  // Get user's input
   let query = event.target.value;
 
   //Get filtered users
@@ -62,12 +59,12 @@ export const onInputHandler = (db) => {
 
   //Show notification message accordigly
   if (query.length === 0) {
-    changeNotifMessage(helpers.elements.notificationBox, 'Nothing to find');
+    changeNotifMessage(elements.notificationBox, 'Nothing to find');
   }
   if (users.length === 0 && query.length > 0) {
-    changeNotifMessage(helpers.elements.notificationBox, 'Nothing found');
+    changeNotifMessage(elements.notificationBox, 'Nothing found');
   }
   if (users.length > 0 && query.length !== 0) {
-    showUsers(helpers.elements.notificationBox, users);
+    showUsers(elements.notificationBox, users);
   }
 };
