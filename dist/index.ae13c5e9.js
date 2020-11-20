@@ -477,31 +477,40 @@ if (module.hot) {
 }
 
 const searchControl = async () => {
-  _helper.elements.searchInput.addEventListener('click', () => {
-    searchView.onFirstTouchHandler(model.state.searchInputTouced);
-  }); //Fetch all users
-
-
-  await model.getAllUsers(_config.API_URL);
-
-  _helper.elements.searchInput.addEventListener('input', () => searchView.onInputHandler(model.state.people));
+  try {
+    //Fetch all users
+    await model.getAllUsers(_config.API_URL);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const addNewControl = async () => {
-  //On form submitt send new person obj to state
-  _helper.elements.addNewForm.addEventListener('submit', event => {
-    event.preventDefault();
+  try {
     let newPerson = addNewView.getInput();
-    model.getNewPerson(newPerson);
-    console.log(newPerson);
-    console.log(model.state.newPerson);
-    model.sendNewPerson(_config.API_URL);
-  });
+    model.createNewPerson(newPerson);
+    await model.sendNewPerson(_config.API_URL);
+    addNewView.clearInput(); //Fetch all users
+
+    await model.getAllUsers(_config.API_URL);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const init = () => {
+  _helper.elements.searchInput.addEventListener('click', () => {
+    searchView.onFirstTouchHandler(model.state.searchInputTouced);
+  });
+
   searchControl();
-  addNewControl();
+
+  _helper.elements.searchInput.addEventListener('input', () => searchView.onInputHandler(model.state.people));
+
+  _helper.elements.addNewForm.addEventListener('submit', event => {
+    event.preventDefault();
+    addNewControl();
+  });
 };
 
 init();
@@ -5023,7 +5032,7 @@ $({ target: 'URL', proto: true, enumerable: true }, {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.sendNewPerson = exports.getNewPerson = exports.getAllUsers = exports.state = void 0;
+exports.sendNewPerson = exports.createNewPerson = exports.getAllUsers = exports.state = void 0;
 
 require("core-js/modules/es.typed-array.float32-array");
 
@@ -5058,7 +5067,8 @@ require("core-js/modules/web.url-search-params");
 const state = {
   searchInputTouced: false,
   people: null,
-  newPerson: null
+  newPerson: null,
+  personCreated: false
 }; //TODO
 // pass proper error from the server
 
@@ -5079,7 +5089,7 @@ const getAllUsers = async url => {
 
 exports.getAllUsers = getAllUsers;
 
-const getNewPerson = newPerson => {
+const createNewPerson = newPerson => {
   const {
     name,
     age
@@ -5091,7 +5101,7 @@ const getNewPerson = newPerson => {
 }; // send a new person
 
 
-exports.getNewPerson = getNewPerson;
+exports.createNewPerson = createNewPerson;
 
 const sendNewPerson = async url => {
   if (!state.newPerson) return;
@@ -5104,7 +5114,8 @@ const sendNewPerson = async url => {
       },
       body: JSON.stringify(state.newPerson)
     });
-    console.log(result);
+    console.log(result.status.ok);
+    state.personCreated = result.status.ok;
   } catch (error) {
     console.log(error);
   }
@@ -5117,14 +5128,15 @@ exports.sendNewPerson = sendNewPerson;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.clean = exports.elements = void 0;
+exports.clearInput = exports.clean = exports.elements = void 0;
 //DOM ELEMENTS
 const elements = {
   notificationBox: document.querySelector('#notifBox'),
   searchInput: document.querySelector('#search-iput'),
   addNewForm: document.querySelector('#addNew-form'),
   nameInput: document.querySelector('#name-input'),
-  ageInput: document.querySelector('#age-input')
+  ageInput: document.querySelector('#age-input'),
+  addNewNotifList: document.querySelector('.Notification__List')
 };
 exports.elements = elements;
 
@@ -5133,6 +5145,12 @@ const clean = element => {
 };
 
 exports.clean = clean;
+
+const clearInput = element => {
+  element.value = '';
+};
+
+exports.clearInput = clearInput;
 },{}],"4Uu3r":[function(require,module,exports) {
 "use strict";
 
@@ -5255,7 +5273,7 @@ exports.onInputHandler = onInputHandler;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getInput = void 0;
+exports.clearInput = exports.showNotification = exports.getInput = void 0;
 
 require("core-js/modules/es.typed-array.float32-array");
 
@@ -5299,6 +5317,28 @@ const getInput = () => {
 };
 
 exports.getInput = getInput;
+
+const showNotification = (status, errorMessage) => {
+  const markUp1 = `<li class="Notification__Item--Success">Person added</li>`;
+  const markUp2 = `<li class="Notification__Item--Error">${errorMessage}</li>`;
+
+  if (status) {
+    _helper.elements.addNewNotifList.insertadjacenthtml('afterbegin', markUp1);
+  }
+
+  if (!status) {
+    _helper.elements.addNewNotifList.insertadjacenthtml('afterbegin', markUp2);
+  }
+};
+
+exports.showNotification = showNotification;
+
+const clearInput = () => {
+  _helper.elements.nameInput.value = '';
+  _helper.elements.ageInput.value = '';
+};
+
+exports.clearInput = clearInput;
 },{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","../helper.js":"4kNhO"}]},{},["5cIxg","tdoOL"], "tdoOL", "parcelRequire9e03")
 
 //# sourceMappingURL=index.ae13c5e9.js.map

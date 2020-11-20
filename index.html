@@ -8,16 +8,16 @@
   </head>
   <body>
     <div class="Container">
-      <div class="Search-Box">
+      <div class="Search__Box">
         <h3 class="Title">Search</h3>
         <input class="Input" id="search-iput" type="text" name="search" />
         <div class="Search__Message-box--invisible" id="notifBox">
           <p class="Search__Message">nothing to find</p>
         </div>
       </div>
-      <div class="AddNew-Box">
+      <div class="AddNew__Box">
         <h3 class="Title">Add new</h3>
-        <form class="AddNew-Form" action="#" id="addNew-form">
+        <form class="AddNew__Form" action="#" id="addNew-form">
           <label class="AddNew__Label" for="name-iput">Name:</label>
           <input class="Input" id="name-input" type="text" />
           <label class="AddNew__Label" for="age-input">Age:</label>
@@ -25,6 +25,18 @@
           <button class="AddNew__Button" type="submit">Add</button>
         </form>
       </div>
+      <div class="AddNew__Notification-Box">
+        <ul class="Notification__List">
+          <!-- <li class="Notification__Item--Success">success message</li>
+          <li class="Notification__Item--Error">error message</li> -->
+        </ul>
+      </div>
+      <!-- <div class="AddNew__Notification-Error">
+        <p>message</p>
+      </div>
+      <div class="AddNew__Notification-Success">
+        <p>message</p>
+      </div> -->
     </div>
   </body>
 </html>

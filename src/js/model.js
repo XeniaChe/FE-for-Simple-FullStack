@@ -5,6 +5,7 @@ export const state = {
   searchInputTouced: false,
   people: null,
   newPerson: null,
+  personCreated: false,
 };
 
 //TODO
@@ -24,7 +25,7 @@ export const getAllUsers = async (url) => {
 //TODO
 
 //get new person  from input
-export const getNewPerson = (newPerson) => {
+export const createNewPerson = (newPerson) => {
   const { name, age } = newPerson;
   state.newPerson = {
     name,
@@ -45,7 +46,8 @@ export const sendNewPerson = async (url) => {
       },
       body: JSON.stringify(state.newPerson),
     });
-    console.log(result);
+    console.log(result.status.ok);
+    state.personCreated = result.status.ok;
   } catch (error) {
     console.log(error);
   }

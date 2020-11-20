@@ -12,33 +12,42 @@ if (module.hot) {
 }
 
 const searchControl = async () => {
+  try {
+    //Fetch all users
+    await model.getAllUsers(API_URL);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const addNewControl = async () => {
+  try {
+    let newPerson = addNewView.getInput();
+    model.createNewPerson(newPerson);
+
+    await model.sendNewPerson(API_URL);
+    addNewView.clearInput();
+    //Fetch all users
+    await model.getAllUsers(API_URL);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const init = () => {
   elements.searchInput.addEventListener('click', () => {
     searchView.onFirstTouchHandler(model.state.searchInputTouced);
   });
 
-  //Fetch all users
-  await model.getAllUsers(API_URL);
+  searchControl();
 
   elements.searchInput.addEventListener('input', () =>
     searchView.onInputHandler(model.state.people)
   );
-};
 
-const addNewControl = async () => {
-  //On form submitt send new person obj to state
   elements.addNewForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    let newPerson = addNewView.getInput();
-    model.getNewPerson(newPerson);
-    console.log(newPerson);
-    console.log(model.state.newPerson);
-
-    model.sendNewPerson(API_URL);
+    addNewControl();
   });
-};
-
-const init = () => {
-  searchControl();
-  addNewControl();
 };
 init();
