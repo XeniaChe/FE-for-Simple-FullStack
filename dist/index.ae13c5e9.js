@@ -460,7 +460,9 @@ require("core-js/modules/web.url-search-params");
 
 var model = _interopRequireWildcard(require("./model.js"));
 
-var searchView = _interopRequireWildcard(require("./searchiVew.js"));
+var searchView = _interopRequireWildcard(require("./views/searchiVew.js"));
+
+var addNewView = _interopRequireWildcard(require("./views/addNewView.js"));
 
 var _helper = require("./helper");
 
@@ -485,12 +487,25 @@ const searchControl = async () => {
   _helper.elements.searchInput.addEventListener('input', () => searchView.onInputHandler(model.state.people));
 };
 
+const addNewControl = async () => {
+  //On form submitt send new person obj to state
+  _helper.elements.addNewForm.addEventListener('submit', event => {
+    event.preventDefault();
+    let newPerson = addNewView.getInput();
+    model.getNewPerson(newPerson);
+    console.log(newPerson);
+    console.log(model.state.newPerson);
+    model.sendNewPerson(_config.API_URL);
+  });
+};
+
 const init = () => {
   searchControl();
+  addNewControl();
 };
 
 init();
-},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","./model.js":"6urHF","./searchiVew.js":"18Ku7","./helper":"4kNhO","./config.js":"4Uu3r"}],"54fM9":[function(require,module,exports) {
+},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","./model.js":"6urHF","./helper":"4kNhO","./config.js":"4Uu3r","./views/searchiVew.js":"4FJkA","./views/addNewView.js":"27VfO"}],"54fM9":[function(require,module,exports) {
 var createTypedArrayConstructor = require('../internals/typed-array-constructor');
 
 // `Float32Array` constructor
@@ -5008,7 +5023,7 @@ $({ target: 'URL', proto: true, enumerable: true }, {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getAllUsers = exports.state = void 0;
+exports.sendNewPerson = exports.getNewPerson = exports.getAllUsers = exports.state = void 0;
 
 require("core-js/modules/es.typed-array.float32-array");
 
@@ -5042,7 +5057,8 @@ require("core-js/modules/web.url-search-params");
 
 const state = {
   searchInputTouced: false,
-  people: null
+  people: null,
+  newPerson: null
 }; //TODO
 // pass proper error from the server
 
@@ -5057,10 +5073,76 @@ const getAllUsers = async url => {
   } catch (error) {
     console.log(error);
   }
-};
+}; //TODO
+//get new person  from input
+
 
 exports.getAllUsers = getAllUsers;
-},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz"}],"18Ku7":[function(require,module,exports) {
+
+const getNewPerson = newPerson => {
+  const {
+    name,
+    age
+  } = newPerson;
+  state.newPerson = {
+    name,
+    age
+  };
+}; // send a new person
+
+
+exports.getNewPerson = getNewPerson;
+
+const sendNewPerson = async url => {
+  if (!state.newPerson) return;
+
+  try {
+    const result = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(state.newPerson)
+    });
+    console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.sendNewPerson = sendNewPerson;
+},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz"}],"4kNhO":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.clean = exports.elements = void 0;
+//DOM ELEMENTS
+const elements = {
+  notificationBox: document.querySelector('#notifBox'),
+  searchInput: document.querySelector('#search-iput'),
+  addNewForm: document.querySelector('#addNew-form'),
+  nameInput: document.querySelector('#name-input'),
+  ageInput: document.querySelector('#age-input')
+};
+exports.elements = elements;
+
+const clean = element => {
+  element.innerHTML = '';
+};
+
+exports.clean = clean;
+},{}],"4Uu3r":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.API_URL = void 0;
+const API_URL = 'https://enigmatic-lake-81712.herokuapp.com/api/users';
+exports.API_URL = API_URL;
+},{}],"4FJkA":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5098,7 +5180,7 @@ require("core-js/modules/web.url.to-json");
 
 require("core-js/modules/web.url-search-params");
 
-var _helper = require("./helper.js");
+var _helper = require("../helper.js");
 
 //Toogle notification visibility
 const makeVisibleNotifBox = element => {
@@ -5115,19 +5197,18 @@ const onFirstTouchHandler = touchedState => {
     makeVisibleNotifBox(_helper.elements.notificationBox);
   }
 }; /// SEARCH USERS
-//Find elemnet in DB based on user's input
 
 
 exports.onFirstTouchHandler = onFirstTouchHandler;
 
 const getSearchedUser = (query, db) => {
-  let filteredUsers = [];
+  let filteredPeople = [];
 
   if (query) {
-    filteredUsers = db.filter(el => el.name.toLowerCase().includes(query));
+    filteredPeople = db.filter(el => el.name.toLowerCase().includes(query));
   }
 
-  return filteredUsers;
+  return filteredPeople;
 }; // Change notif  messgae
 
 
@@ -5138,7 +5219,7 @@ const changeNotifMessage = (element, message) => {
 }; //Append users list if exist
 
 
-const showUsers = (element, usersList) => {
+const showPeople = (element, usersList) => {
   let listMarkUp = ` <ul class="Search__Users-List">
     ${usersList.map(el => `<li>${el.name} - ${el.age}</li>`).join('')}
     </ul>`;
@@ -5148,53 +5229,76 @@ const showUsers = (element, usersList) => {
 
 
 const onInputHandler = db => {
-  let query = event.target.value; //Get filtered users
+  // let query = event.target.value;
+  let query = _helper.elements.searchInput.value; //Get filtered users
 
-  const users = getSearchedUser(query, db);
-  console.log('Filtered users', users); //Show notification message accordigly
+  const persons = getSearchedUser(query, db);
+  console.log('Filtered persons', persons); //Show notification message accordigly
 
   if (query.length === 0) {
     changeNotifMessage(_helper.elements.notificationBox, 'Nothing to find');
   }
 
-  if (users.length === 0 && query.length > 0) {
+  if (persons.length === 0 && query.length > 0) {
     changeNotifMessage(_helper.elements.notificationBox, 'Nothing found');
   }
 
-  if (users.length > 0 && query.length !== 0) {
-    showUsers(_helper.elements.notificationBox, users);
+  if (persons.length > 0 && query.length !== 0) {
+    showPeople(_helper.elements.notificationBox, persons);
   }
 };
 
 exports.onInputHandler = onInputHandler;
-},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","./helper.js":"4kNhO"}],"4kNhO":[function(require,module,exports) {
+},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","../helper.js":"4kNhO"}],"27VfO":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.clean = exports.elements = void 0;
-//DOM ELEMENTS
-const elements = {
-  notificationBox: document.querySelector('#notifBox'),
-  searchInput: document.querySelector('#search-iput')
+exports.getInput = void 0;
+
+require("core-js/modules/es.typed-array.float32-array");
+
+require("core-js/modules/es.typed-array.float64-array");
+
+require("core-js/modules/es.typed-array.int8-array");
+
+require("core-js/modules/es.typed-array.int16-array");
+
+require("core-js/modules/es.typed-array.int32-array");
+
+require("core-js/modules/es.typed-array.uint8-array");
+
+require("core-js/modules/es.typed-array.uint8-clamped-array");
+
+require("core-js/modules/es.typed-array.uint16-array");
+
+require("core-js/modules/es.typed-array.uint32-array");
+
+require("core-js/modules/es.typed-array.from");
+
+require("core-js/modules/es.typed-array.of");
+
+require("core-js/modules/web.immediate");
+
+require("core-js/modules/web.url");
+
+require("core-js/modules/web.url.to-json");
+
+require("core-js/modules/web.url-search-params");
+
+var _helper = require("../helper.js");
+
+const getInput = () => {
+  let name = _helper.elements.nameInput.value;
+  let age = _helper.elements.ageInput.value;
+  return {
+    name,
+    age
+  };
 };
-exports.elements = elements;
 
-const clean = element => {
-  element.innerHTML = '';
-};
-
-exports.clean = clean;
-},{}],"4Uu3r":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.API_URL = void 0;
-const API_URL = 'https://enigmatic-lake-81712.herokuapp.com/api/users';
-exports.API_URL = API_URL;
-},{}]},{},["5cIxg","tdoOL"], "tdoOL", "parcelRequire9e03")
+exports.getInput = getInput;
+},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","../helper.js":"4kNhO"}]},{},["5cIxg","tdoOL"], "tdoOL", "parcelRequire9e03")
 
 //# sourceMappingURL=index.ae13c5e9.js.map

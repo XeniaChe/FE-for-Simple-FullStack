@@ -1,7 +1,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import { elements, clean } from './helper.js';
+import { elements, clean } from '../helper.js';
 
 //Toogle notification visibility
 const makeVisibleNotifBox = (element) => {
@@ -21,15 +21,14 @@ export const onFirstTouchHandler = (touchedState) => {
 };
 
 /// SEARCH USERS
-//Find elemnet in DB based on user's input
 const getSearchedUser = (query, db) => {
-  let filteredUsers = [];
+  let filteredPeople = [];
 
   if (query) {
-    filteredUsers = db.filter((el) => el.name.toLowerCase().includes(query));
+    filteredPeople = db.filter((el) => el.name.toLowerCase().includes(query));
   }
 
-  return filteredUsers;
+  return filteredPeople;
 };
 
 // Change notif  messgae
@@ -40,7 +39,7 @@ const changeNotifMessage = (element, message) => {
 };
 
 //Append users list if exist
-const showUsers = (element, usersList) => {
+const showPeople = (element, usersList) => {
   let listMarkUp = ` <ul class="Search__Users-List">
     ${usersList.map((el) => `<li>${el.name} - ${el.age}</li>`).join('')}
     </ul>`;
@@ -51,20 +50,22 @@ const showUsers = (element, usersList) => {
 
 //SEARCH INPUT HANDLER
 export const onInputHandler = (db) => {
-  let query = event.target.value;
+  // let query = event.target.value;
+
+  let query = elements.searchInput.value;
 
   //Get filtered users
-  const users = getSearchedUser(query, db);
-  console.log('Filtered users', users);
+  const persons = getSearchedUser(query, db);
+  console.log('Filtered persons', persons);
 
   //Show notification message accordigly
   if (query.length === 0) {
     changeNotifMessage(elements.notificationBox, 'Nothing to find');
   }
-  if (users.length === 0 && query.length > 0) {
+  if (persons.length === 0 && query.length > 0) {
     changeNotifMessage(elements.notificationBox, 'Nothing found');
   }
-  if (users.length > 0 && query.length !== 0) {
-    showUsers(elements.notificationBox, users);
+  if (persons.length > 0 && query.length !== 0) {
+    showPeople(elements.notificationBox, persons);
   }
 };
