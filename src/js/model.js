@@ -58,3 +58,8 @@ export const sendNewPerson = async (url) => {
     // console.log(error.response.data.error);
   }
 };
+
+//rest state to prevent unneeded getAllUsers calls
+export const resetPersonCreatedState = () => {
+  state.personCreated = false;
+};

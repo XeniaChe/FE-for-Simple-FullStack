@@ -16,8 +16,8 @@ export const showNotification = (status, newPerson) => {
   // const markUp2 = `<li class="Notification__Item--Error">${errorMessage}</li>`;
   const markUp3 = `<li class="Notification__Item--Error">Name or age is missing</li>`;
 
-  if (status) {
-    elements.addNewNotifList.insertAdjacentHTML('afterbegin', markUp1);
+  if (status && name !== '' && age !== '') {
+    elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp1);
   }
   /*
   if (!status && errorMessage) {
@@ -25,12 +25,12 @@ export const showNotification = (status, newPerson) => {
   }
   */
   if (name === '' || age === '') {
-    elements.addNewNotifList.insertAdjacentHTML('afterbegin', markUp3);
+    elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp3);
   }
 
   setTimeout(() => {
     clean(elements.addNewNotifList);
-  }, 1000);
+  }, 1500);
 };
 
 export const clearInput = () => {

@@ -33,6 +33,7 @@ const addNewControl = async () => {
     if (model.state.personCreated) {
       //Fetch all users
       await model.getAllUsers(API_URL);
+      model.resetPersonCreatedState();
     }
   } catch (error) {
     console.log(error);

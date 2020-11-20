@@ -496,6 +496,7 @@ const addNewControl = async () => {
     if (model.state.personCreated) {
       //Fetch all users
       await model.getAllUsers(_config.API_URL);
+      model.resetPersonCreatedState();
     }
   } catch (error) {
     console.log(error);
@@ -5036,7 +5037,7 @@ $({ target: 'URL', proto: true, enumerable: true }, {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.sendNewPerson = exports.createNewPerson = exports.getAllUsers = exports.state = void 0;
+exports.resetPersonCreatedState = exports.sendNewPerson = exports.createNewPerson = exports.getAllUsers = exports.state = void 0;
 
 require("core-js/modules/es.typed-array.float32-array");
 
@@ -5124,9 +5125,16 @@ const sendNewPerson = async url => {
     throw new error(); // state.serverError = error.response.data.error;
     // console.log(error.response.data.error);
   }
-};
+}; //rest state to prevent unneeded getAllUsers calls
+
 
 exports.sendNewPerson = sendNewPerson;
+
+const resetPersonCreatedState = () => {
+  state.personCreated = false;
+};
+
+exports.resetPersonCreatedState = resetPersonCreatedState;
 },{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz"}],"4kNhO":[function(require,module,exports) {
 "use strict";
 
@@ -5326,8 +5334,8 @@ const showNotification = (status, newPerson) => {
 
   const markUp3 = `<li class="Notification__Item--Error">Name or age is missing</li>`;
 
-  if (status) {
-    _helper.elements.addNewNotifList.insertAdjacentHTML('afterbegin', markUp1);
+  if (status && name !== '' && age !== '') {
+    _helper.elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp1);
   }
   /*
   if (!status && errorMessage) {
@@ -5337,12 +5345,12 @@ const showNotification = (status, newPerson) => {
 
 
   if (name === '' || age === '') {
-    _helper.elements.addNewNotifList.insertAdjacentHTML('afterbegin', markUp3);
+    _helper.elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp3);
   }
 
   setTimeout(() => {
     (0, _helper.clean)(_helper.elements.addNewNotifList);
-  }, 1000);
+  }, 1500);
 };
 
 exports.showNotification = showNotification;
