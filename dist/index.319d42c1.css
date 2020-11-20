@@ -106,7 +106,7 @@ body {
   grid-row: first-row / second-row;
 
   align-self: start;
-  margin-right: 3rem;
+  margin-left: -6rem;
   margin-top: 2rem;
 }
 
