@@ -27,8 +27,13 @@ const addNewControl = async () => {
 
     await model.sendNewPerson(API_URL);
     addNewView.clearInput();
-    //Fetch all users
-    await model.getAllUsers(API_URL);
+
+    addNewView.showNotification(model.state.personCreated, newPerson);
+
+    if (model.state.personCreated) {
+      //Fetch all users
+      await model.getAllUsers(API_URL);
+    }
   } catch (error) {
     console.log(error);
   }

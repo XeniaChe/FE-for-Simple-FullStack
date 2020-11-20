@@ -490,9 +490,13 @@ const addNewControl = async () => {
     let newPerson = addNewView.getInput();
     model.createNewPerson(newPerson);
     await model.sendNewPerson(_config.API_URL);
-    addNewView.clearInput(); //Fetch all users
+    addNewView.clearInput();
+    addNewView.showNotification(model.state.personCreated, newPerson);
 
-    await model.getAllUsers(_config.API_URL);
+    if (model.state.personCreated) {
+      //Fetch all users
+      await model.getAllUsers(_config.API_URL);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -5068,7 +5072,8 @@ const state = {
   searchInputTouced: false,
   people: null,
   newPerson: null,
-  personCreated: false
+  personCreated: false // serverError: null,
+
 }; //TODO
 // pass proper error from the server
 
@@ -5081,7 +5086,7 @@ const getAllUsers = async url => {
     state.people = data;
     console.log(state.people);
   } catch (error) {
-    console.log(error);
+    throw new error();
   }
 }; //TODO
 //get new person  from input
@@ -5104,7 +5109,7 @@ const createNewPerson = newPerson => {
 exports.createNewPerson = createNewPerson;
 
 const sendNewPerson = async url => {
-  if (!state.newPerson) return;
+  if (!state.newPerson || state.newPerson.name === '' || state.newPerson.age === '') return;
 
   try {
     const result = await fetch(url, {
@@ -5114,10 +5119,10 @@ const sendNewPerson = async url => {
       },
       body: JSON.stringify(state.newPerson)
     });
-    console.log(result.status.ok);
-    state.personCreated = result.status.ok;
+    state.personCreated = result.ok;
   } catch (error) {
-    console.log(error);
+    throw new error(); // state.serverError = error.response.data.error;
+    // console.log(error.response.data.error);
   }
 };
 
@@ -5128,7 +5133,7 @@ exports.sendNewPerson = sendNewPerson;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.clearInput = exports.clean = exports.elements = void 0;
+exports.clean = exports.elements = void 0;
 //DOM ELEMENTS
 const elements = {
   notificationBox: document.querySelector('#notifBox'),
@@ -5145,12 +5150,6 @@ const clean = element => {
 };
 
 exports.clean = clean;
-
-const clearInput = element => {
-  element.value = '';
-};
-
-exports.clearInput = clearInput;
 },{}],"4Uu3r":[function(require,module,exports) {
 "use strict";
 
@@ -5318,17 +5317,32 @@ const getInput = () => {
 
 exports.getInput = getInput;
 
-const showNotification = (status, errorMessage) => {
-  const markUp1 = `<li class="Notification__Item--Success">Person added</li>`;
-  const markUp2 = `<li class="Notification__Item--Error">${errorMessage}</li>`;
+const showNotification = (status, newPerson) => {
+  let {
+    name,
+    age
+  } = newPerson;
+  const markUp1 = `<li class="Notification__Item--Success">Person added</li>`; // const markUp2 = `<li class="Notification__Item--Error">${errorMessage}</li>`;
+
+  const markUp3 = `<li class="Notification__Item--Error">Name or age is missing</li>`;
 
   if (status) {
-    _helper.elements.addNewNotifList.insertadjacenthtml('afterbegin', markUp1);
+    _helper.elements.addNewNotifList.insertAdjacentHTML('afterbegin', markUp1);
+  }
+  /*
+  if (!status && errorMessage) {
+    elements.addNewNotifList.insertAdjacentHTML('afterbegin', markUp2);
+  }
+  */
+
+
+  if (name === '' || age === '') {
+    _helper.elements.addNewNotifList.insertAdjacentHTML('afterbegin', markUp3);
   }
 
-  if (!status) {
-    _helper.elements.addNewNotifList.insertadjacenthtml('afterbegin', markUp2);
-  }
+  setTimeout(() => {
+    (0, _helper.clean)(_helper.elements.addNewNotifList);
+  }, 1000);
 };
 
 exports.showNotification = showNotification;

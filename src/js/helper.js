@@ -11,7 +11,3 @@ export const elements = {
 export const clean = (element) => {
   element.innerHTML = '';
 };
-
-export const clearInput = (element) => {
-  element.value = '';
-};
