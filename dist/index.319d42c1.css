@@ -37,6 +37,9 @@ body {
   background-color: gray;
   padding: 3rem;
   justify-self: end;
+  align-self: start;
+
+  min-height: 22rem;
 }
 
 .Search__Message-box--invisible {
@@ -126,37 +129,5 @@ body {
   padding: 2rem;
   border-radius: 1rem;
 }
-
-/*
-.AddNew__Notification-Error {
-  grid-column: second / third;
-  grid-row: first-row / second-row;
-  align-self: start;
-  margin-right: 3rem;
-  margin-top: 2rem;
-
-  background-color: red;
-  padding: 2rem;
-  border-radius: 1rem;
-
-  font-size: 2rem;
-  color: white;
-}
-
-.AddNew__Notification-Success {
-  grid-column: second / third;
-  grid-row: first-row / second-row;
-  align-self: start;
-  margin-right: 3rem;
-  margin-top: 2rem;
-
-  background-color: green;
-  padding: 2rem;
-  border-radius: 1rem;
-
-  font-size: 2rem;
-  color: white;
-}
-*/
 
 /*# sourceMappingURL=index.319d42c1.css.map */
