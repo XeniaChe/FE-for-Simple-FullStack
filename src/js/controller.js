@@ -31,7 +31,7 @@ const addNewControl = async () => {
     addNewView.showNotification(model.state.personCreated, newPerson);
 
     if (model.state.personCreated) {
-      //Fetch all users
+      //Refresh all users list
       await model.getAllUsers(API_URL);
       model.resetPersonCreatedState();
     }

@@ -494,7 +494,7 @@ const addNewControl = async () => {
     addNewView.showNotification(model.state.personCreated, newPerson);
 
     if (model.state.personCreated) {
-      //Fetch all users
+      //Refresh all users list
       await model.getAllUsers(_config.API_URL);
       model.resetPersonCreatedState();
     }
@@ -5125,7 +5125,7 @@ const sendNewPerson = async url => {
     throw new error(); // state.serverError = error.response.data.error;
     // console.log(error.response.data.error);
   }
-}; //rest state to prevent unneeded getAllUsers calls
+}; //reset state to prevent unneeded getAllUsers calls
 
 
 exports.sendNewPerson = sendNewPerson;

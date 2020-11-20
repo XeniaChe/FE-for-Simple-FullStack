@@ -59,7 +59,7 @@ export const sendNewPerson = async (url) => {
   }
 };
 
-//rest state to prevent unneeded getAllUsers calls
+//reset state to prevent unneeded getAllUsers calls
 export const resetPersonCreatedState = () => {
   state.personCreated = false;
 };
