@@ -1,0 +1,93 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+}
+
+.Container {
+  margin: 4rem;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 13rem;
+  justify-items: center;
+
+  height: 30rem;
+}
+
+.Search-Box {
+  background-color: gray;
+  padding: 3rem;
+  justify-self: end;
+}
+
+.Search__Message-box--invisible {
+  display: none;
+}
+
+.Search__Message-box--visible {
+  display: block;
+  background-color: green;
+  border-radius: 0 0 8rem 0;
+  padding: 2rem;
+  padding-left: 0.5rem;
+}
+
+.Search__Users-List {
+  list-style: none;
+}
+
+.Title {
+  align-self: start;
+  margin-bottom: 2rem;
+}
+
+.Input {
+  min-width: 3rem;
+}
+
+.AddNew-Box {
+  background-color: orangered;
+  padding: 3rem;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+  justify-self: start;
+}
+
+.AddNew-Form {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  row-gap: 1.5rem;
+  column-gap: 2rem;
+
+  align-items: center;
+  align-content: start;
+
+  margin-bottom: 2rem;
+}
+
+.AddNew__Button {
+  justify-self: start;
+  padding: 0.5rem 1rem;
+
+  cursor: pointer;
+  display: inline-block;
+}
+
+/*# sourceMappingURL=index.319d42c1.css.map */
