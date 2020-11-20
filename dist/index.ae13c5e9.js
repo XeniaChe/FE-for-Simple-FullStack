@@ -5330,9 +5330,9 @@ const showNotification = (status, newPerson) => {
     name,
     age
   } = newPerson;
-  const markUp1 = `<li class="Notification__Item--Success">Person added</li>`; // const markUp2 = `<li class="Notification__Item--Error">${errorMessage}</li>`;
+  const markUp1 = `<li class="Notification__Item--Success">SUCCESS: Person added</li>`; // const markUp2 = `<li class="Notification__Item--Error">${errorMessage}</li>`;
 
-  const markUp3 = `<li class="Notification__Item--Error">Name or age is missing</li>`;
+  const markUp3 = `<li class="Notification__Item--Error">ERROR: Name or age is missing</li>`;
 
   if (status && name !== '' && age !== '') {
     _helper.elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp1);
