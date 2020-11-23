@@ -536,7 +536,11 @@ const addNewControl = async () => {
     }
 
     await model.sendNewPerson(_config.API_URL, newPerson);
-    addNewView.clearInput();
+
+    if (model.state.personCreated) {
+      addNewView.clearInput();
+    }
+
     addNewView.showNotification(model.state.personCreated, newPerson);
 
     if (model.state.personCreated) {
