@@ -35,6 +35,7 @@ const addNewControl = async () => {
       await model.getAllUsers(API_URL);
       model.resetPersonCreatedState();
     }
+    console.log('Form submitted');
   } catch (error) {
     console.log(error);
   }
@@ -54,7 +55,6 @@ const init = () => {
   elements.addNewForm.addEventListener('submit', (event) => {
     event.preventDefault();
     addNewControl();
-    console.log('Form submitted');
   });
 };
 init();

@@ -498,6 +498,8 @@ const addNewControl = async () => {
       await model.getAllUsers(_config.API_URL);
       model.resetPersonCreatedState();
     }
+
+    console.log('Form submitted');
   } catch (error) {
     console.log(error);
   }
@@ -515,7 +517,6 @@ const init = () => {
   _helper.elements.addNewForm.addEventListener('submit', event => {
     event.preventDefault();
     addNewControl();
-    console.log('Form submitted');
   });
 };
 
@@ -5097,18 +5098,28 @@ const createNewPerson = newPerson => {
     name,
     age
   } = newPerson;
-  state.newPerson = {
-    name,
-    age
-  };
-  console.log(`New person name:'${name}'  age:${age} created`);
+
+  if (name !== '' && age !== '') {
+    state.newPerson = {
+      name,
+      age
+    };
+    console.log(`New person name:'${name}'  age:${age} created`);
+  }
+
+  if (name === '' || age === '') {
+    console.log(`Person's name or age is missing`);
+  }
 }; // send a new person
 
 
 exports.createNewPerson = createNewPerson;
 
 const sendNewPerson = async url => {
-  if (!state.newPerson || state.newPerson.name === '' || state.newPerson.age === '') return;
+  if (!state.newPerson || state.newPerson.name === '' || state.newPerson.age === '') {
+    console.log(`Person wasn't sent`);
+    return;
+  }
 
   try {
     const result = await fetch(url, {

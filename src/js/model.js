@@ -22,11 +22,17 @@ export const getAllUsers = async (url) => {
 //get new person  from input
 export const createNewPerson = (newPerson) => {
   const { name, age } = newPerson;
-  state.newPerson = {
-    name,
-    age,
-  };
-  console.log(`New person name:'${name}'  age:${age} created`);
+  if (name !== '' && age !== '') {
+    state.newPerson = {
+      name,
+      age,
+    };
+    console.log(`New person name:'${name}'  age:${age} created`);
+  }
+
+  if (name === '' || age === '') {
+    console.log(`Person's name or age is missing`);
+  }
 };
 
 // send a new person
@@ -35,8 +41,10 @@ export const sendNewPerson = async (url) => {
     !state.newPerson ||
     state.newPerson.name === '' ||
     state.newPerson.age === ''
-  )
+  ) {
+    console.log(`Person wasn't sent`);
     return;
+  }
 
   try {
     const result = await fetch(url, {
