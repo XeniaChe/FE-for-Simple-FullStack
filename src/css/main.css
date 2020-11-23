@@ -23,7 +23,7 @@ body {
 
   display: grid;
   grid-template-columns: [first] 1fr [second] 1fr [third];
-  grid-template-rows: [first-row] / [second-row];
+  grid-template-rows: [first-row] 1fr [second-row];
   column-gap: 13rem;
   justify-items: center;
   align-content: start;
