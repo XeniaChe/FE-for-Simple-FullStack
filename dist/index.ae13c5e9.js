@@ -5101,7 +5101,7 @@ const createNewPerson = newPerson => {
     name,
     age
   };
-  console.log(`New person name:${name}  age:${age} created`);
+  console.log(`New person name:'${name}'  age:${age} created`);
 }; // send a new person
 
 
@@ -5119,7 +5119,7 @@ const sendNewPerson = async url => {
       body: JSON.stringify(state.newPerson)
     });
     state.personCreated = result.ok;
-    console.log(`The person name: ${state.newPerson.name} age:${state.newPerson.age} was successfully sent`);
+    console.log(`The person name: '${state.newPerson.name}' age:${state.newPerson.age} was successfully sent`);
   } catch (error) {
     throw new error();
   }

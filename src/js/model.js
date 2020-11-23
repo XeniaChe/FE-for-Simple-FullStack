@@ -26,7 +26,7 @@ export const createNewPerson = (newPerson) => {
     name,
     age,
   };
-  console.log(`New person name:${name}  age:${age} created`);
+  console.log(`New person name:'${name}'  age:${age} created`);
 };
 
 // send a new person
@@ -48,7 +48,7 @@ export const sendNewPerson = async (url) => {
     });
     state.personCreated = result.ok;
     console.log(
-      `The person name: ${state.newPerson.name} age:${state.newPerson.age} was successfully sent`
+      `The person name: '${state.newPerson.name}' age:${state.newPerson.age} was successfully sent`
     );
   } catch (error) {
     throw new error();
