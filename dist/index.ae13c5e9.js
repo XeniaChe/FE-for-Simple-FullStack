@@ -476,7 +476,7 @@ if (module.hot) {
   module.hot.accept();
 }
 
-const searchControl = async () => {
+const getAllUsersInitial = async () => {
   try {
     //Fetch all users
     await model.getAllUsers(_config.API_URL);
@@ -485,11 +485,57 @@ const searchControl = async () => {
   }
 };
 
+const onFirstTouchHandler = () => {
+  //change touched state
+  model.state.searchInputTouced = true; //change notification box visibility
+
+  if (model.state.searchInputTouced) {
+    searchView.makeVisibleNotifBox(_helper.elements.notificationBox);
+  }
+};
+
+const searchControl = () => {
+  let query = _helper.elements.searchInput.value; // search users
+
+  let filteredPeople = [];
+
+  if (query) {
+    filteredPeople = model.state.people.filter(el => el.name.toLowerCase().includes(query));
+  }
+
+  console.log('Filtered persons', filteredPeople); //Show notification message accordigly
+
+  if (query.length === 0) {
+    searchView.changeNotifMessage(_helper.elements.notificationBox, 'Nothing to find');
+  }
+
+  if (filteredPeople.length === 0 && query.length > 0) {
+    searchView.changeNotifMessage(_helper.elements.notificationBox, 'Nothing found');
+  }
+
+  if (filteredPeople.length > 0 && query.length !== 0) {
+    searchView.showPeople(_helper.elements.notificationBox, filteredPeople);
+  }
+};
+
 const addNewControl = async () => {
   try {
-    let newPerson = addNewView.getInput();
-    model.createNewPerson(newPerson);
-    await model.sendNewPerson(_config.API_URL);
+    let name = _helper.elements.nameInput.value;
+    let age = _helper.elements.ageInput.value;
+    let newPerson = {
+      name,
+      age
+    };
+
+    if (name !== '' && age !== '') {
+      console.log(`New person name:'${name}'  age:${age} created`);
+    }
+
+    if (name === '' || age === '') {
+      console.log(`Person's name or age is missing`);
+    }
+
+    await model.sendNewPerson(_config.API_URL, newPerson);
     addNewView.clearInput();
     addNewView.showNotification(model.state.personCreated, newPerson);
 
@@ -505,19 +551,11 @@ const addNewControl = async () => {
   }
 };
 
-const init = () => {
-  _helper.elements.searchInput.addEventListener('click', () => {
-    searchView.onFirstTouchHandler(model.state.searchInputTouced);
-  });
-
-  searchControl();
-
-  _helper.elements.searchInput.addEventListener('input', () => searchView.onInputHandler(model.state.people));
-
-  _helper.elements.addNewForm.addEventListener('submit', event => {
-    event.preventDefault();
-    addNewControl();
-  });
+const init = async () => {
+  searchView.onFirstClickEvent(onFirstTouchHandler);
+  await getAllUsersInitial();
+  searchView.onSearchInputEvent(searchControl);
+  addNewView.FormSubmitHandler(addNewControl);
 };
 
 init();
@@ -5039,7 +5077,7 @@ $({ target: 'URL', proto: true, enumerable: true }, {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.resetPersonCreatedState = exports.sendNewPerson = exports.createNewPerson = exports.getAllUsers = exports.state = void 0;
+exports.resetPersonCreatedState = exports.sendNewPerson = exports.getAllUsers = exports.state = void 0;
 
 require("core-js/modules/es.typed-array.float32-array");
 
@@ -5088,35 +5126,13 @@ const getAllUsers = async url => {
   } catch (error) {
     throw new error();
   }
-}; //get new person  from input
+}; // send the new person
 
 
 exports.getAllUsers = getAllUsers;
 
-const createNewPerson = newPerson => {
-  const {
-    name,
-    age
-  } = newPerson;
-
-  if (name !== '' && age !== '') {
-    state.newPerson = {
-      name,
-      age
-    };
-    console.log(`New person name:'${name}'  age:${age} created`);
-  }
-
-  if (name === '' || age === '') {
-    console.log(`Person's name or age is missing`);
-  }
-}; // send a new person
-
-
-exports.createNewPerson = createNewPerson;
-
-const sendNewPerson = async url => {
-  if (!state.newPerson || state.newPerson.name === '' || state.newPerson.age === '') {
+const sendNewPerson = async (url, newPerson) => {
+  if (!newPerson || newPerson.name === '' || newPerson.age === '') {
     console.log(`Person wasn't sent`);
     return;
   }
@@ -5127,10 +5143,10 @@ const sendNewPerson = async url => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(state.newPerson)
+      body: JSON.stringify(newPerson)
     });
     state.personCreated = result.ok;
-    console.log(`The person name: '${state.newPerson.name}' age:${state.newPerson.age} was successfully sent`);
+    console.log(`The person name: '${newPerson.name}' age:${newPerson.age} was successfully sent`);
   } catch (error) {
     throw new error();
   }
@@ -5182,7 +5198,7 @@ exports.API_URL = API_URL;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.onInputHandler = exports.onFirstTouchHandler = void 0;
+exports.onSearchInputEvent = exports.onFirstClickEvent = exports.showPeople = exports.changeNotifMessage = exports.makeVisibleNotifBox = void 0;
 
 require("core-js/modules/es.typed-array.float32-array");
 
@@ -5220,31 +5236,9 @@ var _helper = require("../helper.js");
 const makeVisibleNotifBox = element => {
   element.classList.remove('Search__Message-box--invisible');
   element.classList.add('Search__Message-box--visible');
-}; // ON TOUCHED EVENT HANDLER
+};
 
-
-const onFirstTouchHandler = touchedState => {
-  //change touched state
-  touchedState = true; //change notification visibility
-
-  if (touchedState) {
-    makeVisibleNotifBox(_helper.elements.notificationBox);
-  }
-}; /// SEARCH USERS
-
-
-exports.onFirstTouchHandler = onFirstTouchHandler;
-
-const getSearchedUser = (query, db) => {
-  let filteredPeople = [];
-
-  if (query) {
-    filteredPeople = db.filter(el => el.name.toLowerCase().includes(query));
-  }
-
-  return filteredPeople;
-}; // Change notif  messgae
-
+exports.makeVisibleNotifBox = makeVisibleNotifBox;
 
 const changeNotifMessage = (element, message) => {
   (0, _helper.clean)(element);
@@ -5253,43 +5247,42 @@ const changeNotifMessage = (element, message) => {
 }; //Append users list if exist
 
 
+exports.changeNotifMessage = changeNotifMessage;
+
 const showPeople = (element, usersList) => {
   let listMarkUp = ` <ul class="Search__Users-List">
     ${usersList.map(el => `<li>${el.name} - ${el.age}</li>`).join('')}
     </ul>`;
   (0, _helper.clean)(element);
   element.insertAdjacentHTML('afterbegin', listMarkUp);
-}; //SEARCH INPUT HANDLER
+}; // ON FIRST TOUCH EVENT HANDLER
 
 
-const onInputHandler = db => {
-  // let query = event.target.value;
-  let query = _helper.elements.searchInput.value; //Get filtered users
+exports.showPeople = showPeople;
 
-  const persons = getSearchedUser(query, db);
-  console.log('Filtered persons', persons); //Show notification message accordigly
+const onFirstClickEvent = handler => {
+  _helper.elements.searchInput.addEventListener('click', () => {
+    handler();
+  });
+}; // ON SEARCH EVENT HANDLER
 
-  if (query.length === 0) {
-    changeNotifMessage(_helper.elements.notificationBox, 'Nothing to find');
-  }
 
-  if (persons.length === 0 && query.length > 0) {
-    changeNotifMessage(_helper.elements.notificationBox, 'Nothing found');
-  }
+exports.onFirstClickEvent = onFirstClickEvent;
 
-  if (persons.length > 0 && query.length !== 0) {
-    showPeople(_helper.elements.notificationBox, persons);
-  }
+const onSearchInputEvent = handler => {
+  _helper.elements.searchInput.addEventListener('input', () => {
+    handler();
+  });
 };
 
-exports.onInputHandler = onInputHandler;
+exports.onSearchInputEvent = onSearchInputEvent;
 },{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","../helper.js":"4kNhO"}],"27VfO":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.clearInput = exports.showNotification = exports.getInput = void 0;
+exports.FormSubmitHandler = exports.clearInput = exports.showNotification = exports.getInput = void 0;
 
 require("core-js/modules/es.typed-array.float32-array");
 
@@ -5370,6 +5363,13 @@ const clearInput = () => {
 };
 
 exports.clearInput = clearInput;
+
+const FormSubmitHandler = handler => _helper.elements.addNewForm.addEventListener('submit', event => {
+  event.preventDefault();
+  handler();
+});
+
+exports.FormSubmitHandler = FormSubmitHandler;
 },{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","../helper.js":"4kNhO"}]},{},["5cIxg","tdoOL"], "tdoOL", "parcelRequire9e03")
 
 //# sourceMappingURL=index.ae13c5e9.js.map

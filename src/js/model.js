@@ -19,29 +19,9 @@ export const getAllUsers = async (url) => {
   }
 };
 
-//get new person  from input
-export const createNewPerson = (newPerson) => {
-  const { name, age } = newPerson;
-  if (name !== '' && age !== '') {
-    state.newPerson = {
-      name,
-      age,
-    };
-    console.log(`New person name:'${name}'  age:${age} created`);
-  }
-
-  if (name === '' || age === '') {
-    console.log(`Person's name or age is missing`);
-  }
-};
-
-// send a new person
-export const sendNewPerson = async (url) => {
-  if (
-    !state.newPerson ||
-    state.newPerson.name === '' ||
-    state.newPerson.age === ''
-  ) {
+// send the new person
+export const sendNewPerson = async (url, newPerson) => {
+  if (!newPerson || newPerson.name === '' || newPerson.age === '') {
     console.log(`Person wasn't sent`);
     return;
   }
@@ -52,11 +32,11 @@ export const sendNewPerson = async (url) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(state.newPerson),
+      body: JSON.stringify(newPerson),
     });
     state.personCreated = result.ok;
     console.log(
-      `The person name: '${state.newPerson.name}' age:${state.newPerson.age} was successfully sent`
+      `The person name: '${newPerson.name}' age:${newPerson.age} was successfully sent`
     );
   } catch (error) {
     throw new error();

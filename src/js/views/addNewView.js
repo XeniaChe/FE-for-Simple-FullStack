@@ -37,3 +37,9 @@ export const clearInput = () => {
   elements.nameInput.value = '';
   elements.ageInput.value = '';
 };
+
+export const FormSubmitHandler = (handler) =>
+  elements.addNewForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    handler();
+  });
