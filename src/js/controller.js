@@ -54,6 +54,7 @@ const init = () => {
   elements.addNewForm.addEventListener('submit', (event) => {
     event.preventDefault();
     addNewControl();
+    console.log('Form submitted');
   });
 };
 init();

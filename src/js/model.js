@@ -6,24 +6,18 @@ export const state = {
   people: null,
   newPerson: null,
   personCreated: false,
-  // serverError: null,
 };
-
-//TODO
-// pass proper error from the server
 
 export const getAllUsers = async (url) => {
   try {
     const result = await fetch(url);
     const data = await result.json();
     state.people = data;
-    console.log(state.people);
+    console.log(`People fetched from server  ${JSON.stringify(state.people)}`);
   } catch (error) {
     throw new error();
   }
 };
-
-//TODO
 
 //get new person  from input
 export const createNewPerson = (newPerson) => {
@@ -32,6 +26,7 @@ export const createNewPerson = (newPerson) => {
     name,
     age,
   };
+  console.log(`New person name:${name}  age:${age} created`);
 };
 
 // send a new person
@@ -52,10 +47,11 @@ export const sendNewPerson = async (url) => {
       body: JSON.stringify(state.newPerson),
     });
     state.personCreated = result.ok;
+    console.log(
+      `The person name: ${state.newPerson.name} age:${state.newPerson.age} was successfully sent`
+    );
   } catch (error) {
     throw new error();
-    // state.serverError = error.response.data.error;
-    // console.log(error.response.data.error);
   }
 };
 
