@@ -5282,7 +5282,7 @@ exports.onSearchInputEvent = onSearchInputEvent;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.FormSubmitHandler = exports.clearInput = exports.showNotification = exports.getInput = void 0;
+exports.FormSubmitHandler = exports.clearInput = exports.showNotification = void 0;
 
 require("core-js/modules/es.typed-array.float32-array");
 
@@ -5316,35 +5316,17 @@ require("core-js/modules/web.url-search-params");
 
 var _helper = require("../helper.js");
 
-const getInput = () => {
-  let name = _helper.elements.nameInput.value;
-  let age = _helper.elements.ageInput.value;
-  return {
-    name,
-    age
-  };
-};
-
-exports.getInput = getInput;
-
 const showNotification = (status, newPerson) => {
   let {
     name,
     age
   } = newPerson;
-  const markUp1 = `<li class="Notification__Item--Success">SUCCESS: Person added</li>`; // const markUp2 = `<li class="Notification__Item--Error">${errorMessage}</li>`;
-
+  const markUp1 = `<li class="Notification__Item--Success">SUCCESS: Person added</li>`;
   const markUp3 = `<li class="Notification__Item--Error">ERROR: Name or age is missing</li>`;
 
   if (status && name !== '' && age !== '') {
     _helper.elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp1);
   }
-  /*
-  if (!status && errorMessage) {
-    elements.addNewNotifList.insertAdjacentHTML('afterbegin', markUp2);
-  }
-  */
-
 
   if (name === '' || age === '') {
     _helper.elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp3);
