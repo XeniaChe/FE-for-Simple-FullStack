@@ -2,11 +2,11 @@
   "name": "jsfe-withbe-app",
   "version": "1.0.0",
   "description": "Simple app with FE on JS and BE on NodeJS(Express)",
-  "main": "index.html",
+  "default": "build/index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel index.html",
-    "build": "parcel build index.html --dist-dir ./dist --no-source-maps"
+    "build": "parcel build index.html --dist-dir ./build --no-source-maps"
   },
   "author": "Xenia Cserkun",
   "license": "ISC",

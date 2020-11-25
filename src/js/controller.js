@@ -31,7 +31,7 @@ const onFirstTouchHandler = () => {
 };
 
 const searchControl = () => {
-  let query = elements.searchInput.value;
+  let query = elements.searchInput.value.toLowerCase();
 
   // search users
   let filteredPeople = [];
@@ -94,3 +94,5 @@ const init = async () => {
   addNewView.FormSubmitHandler(addNewControl);
 };
 init();
+
+// "parcel build index.html --dist-dir ./dist --no-source-maps"

@@ -495,7 +495,8 @@ const onFirstTouchHandler = () => {
 };
 
 const searchControl = () => {
-  let query = _helper.elements.searchInput.value; // search users
+  let query = _helper.elements.searchInput.value.toLowerCase(); // search users
+
 
   let filteredPeople = [];
 
@@ -562,8 +563,8 @@ const init = async () => {
   addNewView.FormSubmitHandler(addNewControl);
 };
 
-init();
-},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","./model.js":"6urHF","./helper":"4kNhO","./config.js":"4Uu3r","./views/searchiVew.js":"4FJkA","./views/addNewView.js":"27VfO"}],"54fM9":[function(require,module,exports) {
+init(); // "parcel build index.html --dist-dir ./dist --no-source-maps"
+},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","./model.js":"6urHF","./views/searchiVew.js":"4FJkA","./views/addNewView.js":"27VfO","./helper":"4kNhO","./config.js":"4Uu3r"}],"54fM9":[function(require,module,exports) {
 var createTypedArrayConstructor = require('../internals/typed-array-constructor');
 
 // `Float32Array` constructor
@@ -5164,39 +5165,7 @@ const resetPersonCreatedState = () => {
 };
 
 exports.resetPersonCreatedState = resetPersonCreatedState;
-},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz"}],"4kNhO":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.clean = exports.elements = void 0;
-//DOM ELEMENTS
-const elements = {
-  notificationBox: document.querySelector('#notifBox'),
-  searchInput: document.querySelector('#search-iput'),
-  addNewForm: document.querySelector('#addNew-form'),
-  nameInput: document.querySelector('#name-input'),
-  ageInput: document.querySelector('#age-input'),
-  addNewNotifList: document.querySelector('.Notification__List')
-};
-exports.elements = elements;
-
-const clean = element => {
-  element.innerHTML = '';
-};
-
-exports.clean = clean;
-},{}],"4Uu3r":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.API_URL = void 0;
-const API_URL = 'https://enigmatic-lake-81712.herokuapp.com/api/users';
-exports.API_URL = API_URL;
-},{}],"4FJkA":[function(require,module,exports) {
+},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz"}],"4FJkA":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5280,7 +5249,30 @@ const onSearchInputEvent = handler => {
 };
 
 exports.onSearchInputEvent = onSearchInputEvent;
-},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","../helper.js":"4kNhO"}],"27VfO":[function(require,module,exports) {
+},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","../helper.js":"4kNhO"}],"4kNhO":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.clean = exports.elements = void 0;
+//DOM ELEMENTS
+const elements = {
+  notificationBox: document.querySelector('#notifBox'),
+  searchInput: document.querySelector('#search-iput'),
+  addNewForm: document.querySelector('#addNew-form'),
+  nameInput: document.querySelector('#name-input'),
+  ageInput: document.querySelector('#age-input'),
+  addNewNotifList: document.querySelector('.Notification__List')
+};
+exports.elements = elements;
+
+const clean = element => {
+  element.innerHTML = '';
+};
+
+exports.clean = clean;
+},{}],"27VfO":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5356,6 +5348,15 @@ const FormSubmitHandler = handler => _helper.elements.addNewForm.addEventListene
 });
 
 exports.FormSubmitHandler = FormSubmitHandler;
-},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","../helper.js":"4kNhO"}]},{},["5cIxg","tdoOL"], "tdoOL", "parcelRequire9e03")
+},{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","../helper.js":"4kNhO"}],"4Uu3r":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.API_URL = void 0;
+const API_URL = 'https://enigmatic-lake-81712.herokuapp.com/api/users';
+exports.API_URL = API_URL;
+},{}]},{},["5cIxg","tdoOL"], "tdoOL", "parcelRequire9e03")
 
 //# sourceMappingURL=index.ae13c5e9.js.map
