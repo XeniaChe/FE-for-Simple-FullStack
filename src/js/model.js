@@ -1,22 +1,27 @@
 import 'core-js/stable';
+import { async } from 'regenerator-runtime';
 import 'regenerator-runtime/runtime';
 
 export const state = {
   searchInputTouced: false,
-  people: null,
+  filteredPeople: null,
   newPerson: null,
   personCreated: false,
 };
 
-export const getAllUsers = async (url) => {
+export const getSearchedUsers = async (url, query) => {
   try {
-    const result = await fetch(url);
+    let queryParam = `?searcQuery=${query}`;
+    const result = await fetch(url + queryParam);
     const data = await result.json();
-    state.people = data;
-    console.log(`People fetched from server  ${JSON.stringify(state.people)}`);
-  } catch (error) {
-    throw new error();
-  }
+    state.filteredPeople = data;
+    console.log(`search fired`);
+    console.log(
+      ` Fetched from server people for query "${query}": ${JSON.stringify(
+        state.filteredPeople
+      )}`
+    );
+  } catch (error) {}
 };
 
 // send the new person

@@ -11,15 +11,6 @@ if (module.hot) {
   module.hot.accept();
 }
 
-const getAllUsersInitial = async () => {
-  try {
-    //Fetch all users
-    await model.getAllUsers(API_URL);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 const onFirstTouchHandler = () => {
   //change touched state
   model.state.searchInputTouced = true;
@@ -30,27 +21,22 @@ const onFirstTouchHandler = () => {
   }
 };
 
-const searchControl = () => {
+const searchControl = async () => {
   let query = elements.searchInput.value.toLowerCase();
 
-  // search users
-  let filteredPeople = [];
   if (query) {
-    filteredPeople = model.state.people.filter((el) =>
-      el.name.toLowerCase().includes(query)
-    );
+    await model.getSearchedUsers(API_URL, query);
   }
-  console.log('Filtered persons', filteredPeople);
 
   //Show notification message accordigly
   if (query.length === 0) {
     searchView.changeNotifMessage(elements.notificationBox, 'Nothing to find');
   }
-  if (filteredPeople.length === 0 && query.length > 0) {
+  if (model.state.filteredPeople.length === 0 && query.length > 0) {
     searchView.changeNotifMessage(elements.notificationBox, 'Nothing found');
   }
-  if (filteredPeople.length > 0 && query.length !== 0) {
-    searchView.showPeople(elements.notificationBox, filteredPeople);
+  if (model.state.filteredPeople.length > 0 && query.length !== 0) {
+    searchView.showPeople(elements.notificationBox, model.state.filteredPeople);
   }
 };
 
@@ -69,17 +55,14 @@ const addNewControl = async () => {
     }
 
     await model.sendNewPerson(API_URL, newPerson);
-    if (model.state.personCreated) {
-      addNewView.clearInput();
-    }
 
     addNewView.showNotification(model.state.personCreated, newPerson);
 
     if (model.state.personCreated) {
-      //Refresh all users list
-      await model.getAllUsers(API_URL);
+      addNewView.clearInput();
       model.resetPersonCreatedState();
     }
+
     console.log('Form submitted');
   } catch (error) {
     console.log(error);
@@ -88,11 +71,7 @@ const addNewControl = async () => {
 
 const init = async () => {
   searchView.onFirstClickEvent(onFirstTouchHandler);
-  await getAllUsersInitial();
   searchView.onSearchInputEvent(searchControl);
-
   addNewView.FormSubmitHandler(addNewControl);
 };
 init();
-
-// "parcel build index.html --dist-dir ./dist --no-source-maps"
