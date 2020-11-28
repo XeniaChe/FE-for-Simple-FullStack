@@ -23,19 +23,25 @@ const onFirstTouchHandler = () => {
 
 const searchControl = async () => {
   let query = elements.searchInput.value.toLowerCase();
+  let queryCheck = model.inputAlphabeticCheck(query);
 
-  if (query) {
+  if (query && queryCheck) {
     await model.getSearchedUsers(API_URL, query);
   }
 
   //Show notification message accordigly
-  if (query.length === 0) {
+
+  if (query.length === 0 || !queryCheck) {
     searchView.changeNotifMessage(elements.notificationBox, 'Nothing to find');
   }
   if (model.state.filteredPeople.length === 0 && query.length > 0) {
     searchView.changeNotifMessage(elements.notificationBox, 'Nothing found');
   }
-  if (model.state.filteredPeople.length > 0 && query.length !== 0) {
+  if (
+    model.state.filteredPeople.length > 0 &&
+    query.length !== 0 &&
+    queryCheck
+  ) {
     searchView.showPeople(elements.notificationBox, model.state.filteredPeople);
   }
 };
@@ -45,18 +51,28 @@ const addNewControl = async () => {
     let name = elements.nameInput.value;
     let age = elements.ageInput.value;
 
+    const nameCheck = model.inputAlphabeticCheck(name);
+
     let newPerson = { name, age };
-    if (name !== '' && age !== '') {
-      console.log(`New person name:'${name}'  age:${age} created`);
-    }
 
     if (name === '' || age === '') {
       console.log(`Person's name or age is missing`);
     }
 
-    await model.sendNewPerson(API_URL, newPerson);
+    if (!nameCheck) {
+      console.log(`Person wasn't sent. Invalid name format`);
+    }
 
-    addNewView.showNotification(model.state.personCreated, newPerson);
+    if (name !== '' && age !== '' && nameCheck) {
+      console.log(`New person name:'${name}'  age:${age} created`);
+      await model.sendNewPerson(API_URL, newPerson);
+    }
+
+    addNewView.showNotification(
+      model.state.personCreated,
+      newPerson,
+      nameCheck
+    );
 
     if (model.state.personCreated) {
       addNewView.clearInput();

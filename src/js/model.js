@@ -1,10 +1,9 @@
 import 'core-js/stable';
-import { async } from 'regenerator-runtime';
 import 'regenerator-runtime/runtime';
 
 export const state = {
   searchInputTouced: false,
-  filteredPeople: null,
+  filteredPeople: [],
   newPerson: null,
   personCreated: false,
 };
@@ -21,7 +20,9 @@ export const getSearchedUsers = async (url, query) => {
         state.filteredPeople
       )}`
     );
-  } catch (error) {}
+  } catch (error) {
+    throw new error();
+  }
 };
 
 // send the new person
@@ -51,4 +52,9 @@ export const sendNewPerson = async (url, newPerson) => {
 //reset state to prevent unneeded getAllUsers calls
 export const resetPersonCreatedState = () => {
   state.personCreated = false;
+};
+
+export const inputAlphabeticCheck = (q) => {
+  const regEx = /[a-zA-Z ]+/;
+  return regEx.test(q);
 };

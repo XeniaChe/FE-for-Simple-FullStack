@@ -3,13 +3,18 @@ import 'regenerator-runtime/runtime';
 
 import { elements, clean } from '../helper.js';
 
-export const showNotification = (status, newPerson) => {
+export const showNotification = (status, newPerson, nameCheck) => {
   let { name, age } = newPerson;
   const markUp1 = `<li class="Notification__Item--Success">SUCCESS: Person added</li>`;
+  const markUp2 = `<li class="Notification__Item--Error">ERROR:Invalid name format</li>`;
   const markUp3 = `<li class="Notification__Item--Error">ERROR: Name or age is missing</li>`;
 
   if (status && name !== '' && age !== '') {
     elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp1);
+  }
+
+  if (!nameCheck) {
+    elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp2);
   }
 
   if (name === '' || age === '') {

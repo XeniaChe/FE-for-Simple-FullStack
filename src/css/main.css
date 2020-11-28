@@ -66,6 +66,9 @@ body {
 .Input {
   min-width: 3rem;
 }
+.Input:invalid {
+  border: 2px solid red;
+}
 
 .AddNew__Box {
   grid-column: second / third;
