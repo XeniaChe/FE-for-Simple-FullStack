@@ -26,8 +26,13 @@ export const getSearchedUsers = async (url, query) => {
 };
 
 // send the new person
-export const sendNewPerson = async (url, newPerson) => {
-  if (!newPerson || newPerson.name === '' || newPerson.age === '') {
+export const sendNewPerson = async (url, newPerson, nameCheck) => {
+  if (
+    !newPerson ||
+    newPerson.name === '' ||
+    newPerson.age === '' ||
+    !nameCheck
+  ) {
     console.log(`Person wasn't sent`);
     return;
   }

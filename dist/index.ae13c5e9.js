@@ -522,15 +522,11 @@ const addNewControl = async () => {
       console.log(`Person's name or age is missing`);
     }
 
-    if (!nameCheck) {
-      console.log(`Person wasn't sent. Invalid name format`);
+    if (!nameCheck && age !== '' && name !== '') {
+      console.log(`Invalid name format`);
     }
 
-    if (name !== '' && age !== '' && nameCheck) {
-      console.log(`New person name:'${name}'  age:${age} created`);
-      await model.sendNewPerson(_config.API_URL, newPerson);
-    }
-
+    await model.sendNewPerson(_config.API_URL, newPerson, nameCheck);
     addNewView.showNotification(model.state.personCreated, newPerson, nameCheck);
 
     if (model.state.personCreated) {
@@ -5125,8 +5121,8 @@ const getSearchedUsers = async (url, query) => {
 
 exports.getSearchedUsers = getSearchedUsers;
 
-const sendNewPerson = async (url, newPerson) => {
-  if (!newPerson || newPerson.name === '' || newPerson.age === '') {
+const sendNewPerson = async (url, newPerson, nameCheck) => {
+  if (!newPerson || newPerson.name === '' || newPerson.age === '' || !nameCheck) {
     console.log(`Person wasn't sent`);
     return;
   }
@@ -5344,7 +5340,7 @@ const showNotification = (status, newPerson, nameCheck) => {
     _helper.elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp1);
   }
 
-  if (!nameCheck) {
+  if (!nameCheck && age !== '' && name !== '') {
     _helper.elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp2);
   }
 
@@ -5380,7 +5376,7 @@ const debounce = (callback, wait) => {
 };
 
 const FormSubmitHandler = handler => {
-  const debounced = debounce(handler, 1000);
+  const debounced = debounce(handler, 500);
 
   _helper.elements.addNewForm.addEventListener('submit', event => {
     event.preventDefault();

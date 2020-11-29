@@ -13,7 +13,7 @@ export const showNotification = (status, newPerson, nameCheck) => {
     elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp1);
   }
 
-  if (!nameCheck) {
+  if (!nameCheck && age !== '' && name !== '') {
     elements.addNewNotifList.insertAdjacentHTML('beforeend', markUp2);
   }
 
@@ -46,7 +46,7 @@ const debounce = (callback, wait) => {
 };
 
 export const FormSubmitHandler = (handler) => {
-  const debounced = debounce(handler, 1000);
+  const debounced = debounce(handler, 500);
 
   elements.addNewForm.addEventListener('submit', (event) => {
     event.preventDefault();

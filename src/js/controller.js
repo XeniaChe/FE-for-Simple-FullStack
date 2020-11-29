@@ -59,14 +59,11 @@ const addNewControl = async () => {
       console.log(`Person's name or age is missing`);
     }
 
-    if (!nameCheck) {
-      console.log(`Person wasn't sent. Invalid name format`);
+    if (!nameCheck && age !== '' && name !== '') {
+      console.log(`Invalid name format`);
     }
 
-    if (name !== '' && age !== '' && nameCheck) {
-      console.log(`New person name:'${name}'  age:${age} created`);
-      await model.sendNewPerson(API_URL, newPerson);
-    }
+    await model.sendNewPerson(API_URL, newPerson, nameCheck);
 
     addNewView.showNotification(
       model.state.personCreated,
