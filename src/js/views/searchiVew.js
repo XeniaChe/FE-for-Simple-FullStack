@@ -33,8 +33,33 @@ export const onFirstClickEvent = (handler) => {
 };
 
 // ON SEARCH EVENT HANDLER
+const debounce = (func, wait) => {
+  let timeout;
+
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+const debounce2 = (callback, wait) => {
+  let timeout;
+
+  return (...args) => {
+    const later = () => {
+      callback(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
 export const onSearchInputEvent = (handler) => {
-  elements.searchInput.addEventListener('input', () => {
-    handler();
-  });
+  elements.searchInput.addEventListener('input', debounce2(handler, 1000));
 };

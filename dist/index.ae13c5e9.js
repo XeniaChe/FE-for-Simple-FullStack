@@ -5238,10 +5238,33 @@ const onFirstClickEvent = handler => {
 
 exports.onFirstClickEvent = onFirstClickEvent;
 
+const debounce = (func, wait) => {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+const debounce2 = (callback, wait) => {
+  let timeout;
+  return (...args) => {
+    const later = () => {
+      callback(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
 const onSearchInputEvent = handler => {
-  _helper.elements.searchInput.addEventListener('input', () => {
-    handler();
-  });
+  _helper.elements.searchInput.addEventListener('input', debounce2(handler, 1000));
 };
 
 exports.onSearchInputEvent = onSearchInputEvent;
@@ -5343,10 +5366,27 @@ const clearInput = () => {
 
 exports.clearInput = clearInput;
 
-const FormSubmitHandler = handler => _helper.elements.addNewForm.addEventListener('submit', event => {
-  event.preventDefault();
-  handler();
-});
+const debounce = (callback, wait) => {
+  let timeout;
+  return (...args) => {
+    const later = () => {
+      clearTimeout(timeout);
+      callback(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+const FormSubmitHandler = handler => {
+  const debounced = debounce(handler, 1000);
+
+  _helper.elements.addNewForm.addEventListener('submit', event => {
+    event.preventDefault();
+    debounced();
+  });
+};
 
 exports.FormSubmitHandler = FormSubmitHandler;
 },{"core-js/modules/es.typed-array.float32-array":"54fM9","core-js/modules/es.typed-array.float64-array":"ZJFU4","core-js/modules/es.typed-array.int8-array":"2fwA1","core-js/modules/es.typed-array.int16-array":"2wYyy","core-js/modules/es.typed-array.int32-array":"75fUH","core-js/modules/es.typed-array.uint8-array":"6N9xn","core-js/modules/es.typed-array.uint8-clamped-array":"6Ytwn","core-js/modules/es.typed-array.uint16-array":"3hXJL","core-js/modules/es.typed-array.uint32-array":"6Oyo3","core-js/modules/es.typed-array.from":"1IL2z","core-js/modules/es.typed-array.of":"2ez4A","core-js/modules/web.immediate":"3HD2v","core-js/modules/web.url":"3qDW4","core-js/modules/web.url.to-json":"GBaXe","core-js/modules/web.url-search-params":"17vSz","../helper.js":"4kNhO"}],"4Uu3r":[function(require,module,exports) {
